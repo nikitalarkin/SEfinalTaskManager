@@ -1,0 +1,317 @@
+{
+	"info": {
+		"_postman_id": "95ad5657-9388-4811-af71-2bd459473bc2",
+		"name": "Task Managment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "49775572",
+		"_collection_link": "https://nikitalarkin-5521870.postman.co/workspace/Nikita-Larkin's-Workspace~549bce10-697c-4321-834d-7f752525d521/collection/49775572-95ad5657-9388-4811-af71-2bd459473bc2?action=share&source=collection_link&creator=49775572"
+	},
+	"item": [
+		{
+			"name": "Auth register",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin@gmail.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "password123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"manager@gmail.com\",\r\n  \"password\": \"StrongPass123\",\r\n  \"firstName\": \"Manager\",\r\n  \"lastName\": \"Stavr\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/auth/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "auth ping",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin@gmail.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "password123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/auth/ping",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"ping"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "auth me",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin@gmail.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "password123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/me",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create project",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin@gmail.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "password123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Demo Project\",\r\n  \"description\": \"Project for demo\",\r\n  \"memberIds\": []\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/projects",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"projects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "project list",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin@gmail.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "password123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/projects",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"projects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create task",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin@gmail.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "password123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"projectId\": 1,\r\n  \"title\": \"First task\",\r\n  \"description\": \"Demo task\",\r\n  \"status\": \"NEW\",\r\n  \"priority\": \"MEDIUM\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/tasks",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"tasks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add comment",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "admin@gmail.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "password123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"taskId\": 1,\r\n  \"text\": \"First comment\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/comments",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"comments"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"value": ""
+		}
+	]
+}
