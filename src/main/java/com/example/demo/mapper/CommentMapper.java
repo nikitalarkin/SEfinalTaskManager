@@ -17,8 +17,8 @@ public interface CommentMapper {
     @Mapping(target = "createdAt", ignore = true)
     Comment toEntity(CommentRequestDto dto);
 
-    @Mapping(target = "taskId", expression = "java(taskId(comment.getTask()))")
-    @Mapping(target = "authorId", expression = "java(userId(comment.getAuthor()))")
+    @Mapping(target = "taskId", source = "task")
+    @Mapping(target = "authorId", source = "author")
     CommentResponseDto toResponse(Comment comment);
 
     default Long userId(User user) {

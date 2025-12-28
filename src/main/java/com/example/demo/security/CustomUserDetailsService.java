@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.stream.Collectors;
+// imports removed
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -21,19 +21,25 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        java.util.Optional<User> userOpt = userRepository.findByEmail(username);
+        if (userOpt.isEmpty()) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        User user = userOpt.get();
 
         if (!user.isActive()) {
             throw new UsernameNotFoundException("User is inactive");
         }
 
+        java.util.Set<org.springframework.security.core.GrantedAuthority> authorities = new java.util.HashSet<>();
+        for (com.example.demo.entity.Role r : user.getRoles()) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + r.getName()));
+        }
+
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getEmail())
                 .password(user.getPasswordHash())
-                .authorities(user.getRoles().stream()
-                        .map(r -> new SimpleGrantedAuthority("ROLE_" + r.getName()))
-                        .collect(Collectors.toSet()))
+                .authorities(authorities)
                 .build();
     }
 }

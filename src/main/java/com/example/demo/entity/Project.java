@@ -13,7 +13,6 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @EqualsAndHashCode(of = "id")
 public class Project {
 
@@ -35,12 +34,7 @@ public class Project {
     private Instant createdAt;
 
     @ManyToMany
-    @JoinTable(
-            name = "project_members",
-            joinColumns = @JoinColumn(name = "project_id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "user_id", nullable = false)
-    )
-    @Builder.Default
+    @JoinTable(name = "project_members", joinColumns = @JoinColumn(name = "project_id", nullable = false), inverseJoinColumns = @JoinColumn(name = "user_id", nullable = false))
     private Set<User> members = new HashSet<>();
 
     @PrePersist

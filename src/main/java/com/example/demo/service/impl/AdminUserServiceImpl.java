@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class AdminUserServiceImpl implements AdminUserService {
@@ -24,9 +23,9 @@ public class AdminUserServiceImpl implements AdminUserService {
     private final UserMapper userMapper;
 
     public AdminUserServiceImpl(UserRepository userRepository,
-                                RoleRepository roleRepository,
-                                PasswordEncoder passwordEncoder,
-                                UserMapper userMapper) {
+            RoleRepository roleRepository,
+            PasswordEncoder passwordEncoder,
+            UserMapper userMapper) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
@@ -36,23 +35,27 @@ public class AdminUserServiceImpl implements AdminUserService {
     @Transactional
     @Override
     public UserResponseDto createUser(UserRequestDto dto) {
-        if (userRepository.existsByEmail(dto.email())) {
+        if (userRepository.existsByEmail(dto.getEmail())) {
             throw new IllegalArgumentException("Email already exists");
         }
 
-        User user = User.builder()
-                .email(dto.email())
-                .passwordHash(passwordEncoder.encode(dto.password()))
-                .firstName(dto.firstName())
-                .lastName(dto.lastName())
-                .isActive(dto.isActive() != null ? dto.isActive() : true)
-                .build();
+        User user = new User();
+        user.setEmail(dto.getEmail());
+        user.setPasswordHash(passwordEncoder.encode(dto.getPassword()));
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        user.setActive(dto.getIsActive() != null ? dto.getIsActive() : true);
 
-        Set<String> roleNames = dto.roles() == null || dto.roles().isEmpty() ? Set.of("USER") : dto.roles();
-        Set<Role> roles = roleNames.stream()
-                .map(name -> roleRepository.findByName(name)
-                        .orElseThrow(() -> new IllegalArgumentException("Role not found: " + name)))
-                .collect(Collectors.toSet());
+        Set<String> roleNames = dto.getRoles() == null || dto.getRoles().isEmpty() ? Set.of("USER") : dto.getRoles();
+        Set<Role> roles = new java.util.HashSet<>();
+        for (String name : roleNames) {
+            java.util.Optional<Role> roleOpt = roleRepository.findByName(name);
+            if (roleOpt.isEmpty()) {
+                throw new IllegalArgumentException("Role not found: " + name);
+            }
+            Role role = roleOpt.get();
+            roles.add(role);
+        }
 
         user.setRoles(roles);
 
@@ -62,8 +65,11 @@ public class AdminUserServiceImpl implements AdminUserService {
     @Transactional
     @Override
     public void setActive(Long userId, boolean active) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        java.util.Optional<User> userOpt = userRepository.findById(userId);
+        if (userOpt.isEmpty()) {
+            throw new IllegalArgumentException("User not found");
+        }
+        User user = userOpt.get();
         user.setActive(active);
         userRepository.save(user);
     }
@@ -80,13 +86,21 @@ public class AdminUserServiceImpl implements AdminUserService {
     @Transactional
     @Override
     public UserResponseDto setRoles(Long userId, Set<String> roles) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        java.util.Optional<User> userOpt = userRepository.findById(userId);
+        if (userOpt.isEmpty()) {
+            throw new IllegalArgumentException("User not found");
+        }
+        User user = userOpt.get();
 
-        Set<Role> roleEntities = roles.stream()
-                .map(name -> roleRepository.findByName(name)
-                        .orElseThrow(() -> new IllegalArgumentException("Role not found: " + name)))
-                .collect(Collectors.toSet());
+        Set<Role> roleEntities = new java.util.HashSet<>();
+        for (String name : roles) {
+            java.util.Optional<Role> roleOpt = roleRepository.findByName(name);
+            if (roleOpt.isEmpty()) {
+                throw new IllegalArgumentException("Role not found: " + name);
+            }
+            Role role = roleOpt.get();
+            roleEntities.add(role);
+        }
 
         user.setRoles(roleEntities);
         return userMapper.toResponse(userRepository.save(user));

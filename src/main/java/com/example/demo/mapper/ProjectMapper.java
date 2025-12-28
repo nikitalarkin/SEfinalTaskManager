@@ -8,7 +8,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface ProjectMapper {
@@ -19,8 +18,8 @@ public interface ProjectMapper {
     @Mapping(target = "members", ignore = true)
     Project toEntity(ProjectRequestDto dto);
 
-    @Mapping(target = "createdById", expression = "java(userId(project.getCreatedBy()))")
-    @Mapping(target = "memberIds", expression = "java(userIds(project.getMembers()))")
+    @Mapping(target = "createdById", source = "createdBy")
+    @Mapping(target = "memberIds", source = "members")
     ProjectResponseDto toResponse(Project project);
 
     default Long userId(User user) {
@@ -28,7 +27,12 @@ public interface ProjectMapper {
     }
 
     default Set<Long> userIds(Set<User> users) {
-        if (users == null) return Set.of();
-        return users.stream().map(User::getId).collect(Collectors.toSet());
+        if (users == null)
+            return Set.of();
+        Set<Long> ids = new java.util.HashSet<>();
+        for (User u : users) {
+            ids.add(u.getId());
+        }
+        return ids;
     }
 }

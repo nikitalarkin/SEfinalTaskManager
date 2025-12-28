@@ -12,7 +12,6 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @EqualsAndHashCode(of = "id")
 public class User {
 
@@ -36,11 +35,6 @@ public class User {
     private boolean isActive;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "role_id", nullable = false)
-    )
-    @Builder.Default
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", nullable = false), inverseJoinColumns = @JoinColumn(name = "role_id", nullable = false))
     private Set<Role> roles = new HashSet<>();
 }

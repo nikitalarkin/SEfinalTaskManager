@@ -23,20 +23,29 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     @Override
     public UserResponseDto getMe(String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        java.util.Optional<User> userOpt = userRepository.findByEmail(email);
+        if (userOpt.isEmpty()) {
+            throw new IllegalArgumentException("User not found");
+        }
+        User user = userOpt.get();
         return userMapper.toResponse(user);
     }
 
     @Transactional
     @Override
     public UserResponseDto updateMe(String email, UserRequestDto dto) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        java.util.Optional<User> userOpt = userRepository.findByEmail(email);
+        if (userOpt.isEmpty()) {
+            throw new IllegalArgumentException("User not found");
+        }
+        User user = userOpt.get();
 
-        if (dto.firstName() != null) user.setFirstName(dto.firstName());
-        if (dto.lastName() != null) user.setLastName(dto.lastName());
-        if (dto.isActive() != null) user.setActive(dto.isActive());
+        if (dto.getFirstName() != null)
+            user.setFirstName(dto.getFirstName());
+        if (dto.getLastName() != null)
+            user.setLastName(dto.getLastName());
+        if (dto.getIsActive() != null)
+            user.setActive(dto.getIsActive());
 
         User saved = userRepository.save(user);
         return userMapper.toResponse(saved);

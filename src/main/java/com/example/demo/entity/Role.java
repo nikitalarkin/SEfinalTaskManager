@@ -9,7 +9,6 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @EqualsAndHashCode(of = "id")
 public class Role {
 

@@ -1,12 +1,20 @@
 package com.example.demo.dto.response;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.Instant;
 
-public record CommentResponseDto(
-        Long id,
-        Long taskId,
-        Long authorId,
-        String text,
-        Instant createdAt
-) {
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class CommentResponseDto {
+        private Long id;
+        private Long taskId;
+        private Long authorId;
+        private String text;
+        private Instant createdAt;
 }

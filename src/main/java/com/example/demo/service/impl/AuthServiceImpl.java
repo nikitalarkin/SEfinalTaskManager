@@ -22,9 +22,9 @@ public class AuthServiceImpl implements AuthService {
     private final UserMapper userMapper;
 
     public AuthServiceImpl(UserRepository userRepository,
-                           RoleRepository roleRepository,
-                           PasswordEncoder passwordEncoder,
-                           UserMapper userMapper) {
+            RoleRepository roleRepository,
+            PasswordEncoder passwordEncoder,
+            UserMapper userMapper) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
@@ -34,20 +34,22 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     @Override
     public UserResponseDto register(RegisterRequestDto dto) {
-        if (userRepository.existsByEmail(dto.email())) {
+        if (userRepository.existsByEmail(dto.getEmail())) {
             throw new IllegalArgumentException("Email already exists");
         }
 
-        Role userRole = roleRepository.findByName("USER")
-                .orElseThrow(() -> new IllegalStateException("Role USER not found"));
+        java.util.Optional<Role> roleOpt = roleRepository.findByName("USER");
+        if (roleOpt.isEmpty()) {
+            throw new IllegalStateException("Role USER not found");
+        }
+        Role userRole = roleOpt.get();
 
-        User user = User.builder()
-                .email(dto.email())
-                .passwordHash(passwordEncoder.encode(dto.password()))
-                .firstName(dto.firstName())
-                .lastName(dto.lastName())
-                .isActive(true)
-                .build();
+        User user = new User();
+        user.setEmail(dto.getEmail());
+        user.setPasswordHash(passwordEncoder.encode(dto.getPassword()));
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        user.setActive(true);
 
         user.getRoles().add(userRole);
 
@@ -58,14 +60,17 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     @Override
     public void changePassword(String email, ChangePasswordRequestDto dto) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        java.util.Optional<User> userOpt = userRepository.findByEmail(email);
+        if (userOpt.isEmpty()) {
+            throw new IllegalArgumentException("User not found");
+        }
+        User user = userOpt.get();
 
-        if (!passwordEncoder.matches(dto.oldPassword(), user.getPasswordHash())) {
+        if (!passwordEncoder.matches(dto.getOldPassword(), user.getPasswordHash())) {
             throw new IllegalArgumentException("Old password is incorrect");
         }
 
-        user.setPasswordHash(passwordEncoder.encode(dto.newPassword()));
+        user.setPasswordHash(passwordEncoder.encode(dto.getNewPassword()));
         userRepository.save(user);
     }
 }

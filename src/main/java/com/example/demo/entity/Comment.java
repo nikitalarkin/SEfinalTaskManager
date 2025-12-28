@@ -11,7 +11,6 @@ import java.time.Instant;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @EqualsAndHashCode(of = "id")
 public class Comment {
 

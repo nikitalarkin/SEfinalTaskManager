@@ -4,30 +4,37 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Set;
 
-public record UserRequestDto(
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserRequestDto {
         @NotBlank
         @Email
         @Size(max = 255)
-        String email,
+        private String email;
 
         @NotBlank
         @Size(min = 6, max = 72)
-        String password,
+        private String password;
 
         @NotBlank
         @Size(max = 100)
-        String firstName,
+        private String firstName;
 
         @NotBlank
         @Size(max = 100)
-        String lastName,
+        private String lastName;
 
         @NotNull
-        Boolean isActive,
+        private Boolean isActive;
 
-        Set<String> roles
-) {
+        private Set<String> roles;
 }

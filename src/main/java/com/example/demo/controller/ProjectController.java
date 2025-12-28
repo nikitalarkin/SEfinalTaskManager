@@ -23,8 +23,7 @@ public class ProjectController {
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
     @PostMapping
-    public ResponseEntity<ProjectResponseDto> create(Authentication authentication,
-                                                     @Valid @RequestBody ProjectRequestDto dto) {
+    public ResponseEntity<ProjectResponseDto> create(Authentication authentication, @Valid @RequestBody ProjectRequestDto dto) {
         return ResponseEntity.ok(projectService.create(authentication.getName(), dto));
     }
 
@@ -39,23 +38,17 @@ public class ProjectController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProjectResponseDto> update(Authentication authentication,
-                                                     @PathVariable Long id,
-                                                     @Valid @RequestBody ProjectRequestDto dto) {
+    public ResponseEntity<ProjectResponseDto> update(Authentication authentication, @PathVariable Long id, @Valid @RequestBody ProjectRequestDto dto) {
         return ResponseEntity.ok(projectService.update(authentication.getName(), id, dto));
     }
 
     @PostMapping("/{id}/members/{userId}")
-    public ResponseEntity<ProjectResponseDto> addMember(Authentication authentication,
-                                                        @PathVariable Long id,
-                                                        @PathVariable Long userId) {
+    public ResponseEntity<ProjectResponseDto> addMember(Authentication authentication, @PathVariable Long id, @PathVariable Long userId) {
         return ResponseEntity.ok(projectService.addMember(authentication.getName(), id, userId));
     }
 
     @DeleteMapping("/{id}/members/{userId}")
-    public ResponseEntity<ProjectResponseDto> removeMember(Authentication authentication,
-                                                           @PathVariable Long id,
-                                                           @PathVariable Long userId) {
+    public ResponseEntity<ProjectResponseDto> removeMember(Authentication authentication, @PathVariable Long id, @PathVariable Long userId) {
         return ResponseEntity.ok(projectService.removeMember(authentication.getName(), id, userId));
     }
 

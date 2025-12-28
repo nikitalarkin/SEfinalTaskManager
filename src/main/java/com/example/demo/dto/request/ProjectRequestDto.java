@@ -2,17 +2,24 @@ package com.example.demo.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Set;
 
-public record ProjectRequestDto(
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class ProjectRequestDto {
         @NotBlank
         @Size(max = 200)
-        String name,
+        private String name;
 
         @Size(max = 2000)
-        String description,
+        private String description;
 
-        Set<Long> memberIds
-) {
+        private Set<Long> memberIds;
 }

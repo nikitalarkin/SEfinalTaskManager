@@ -29,10 +29,7 @@ public class TaskController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TaskResponseDto>> list(Authentication authentication,
-                                                      @RequestParam(required = false) Long projectId,
-                                                      @RequestParam(required = false) TaskStatus status,
-                                                      @RequestParam(required = false) Long assignedToId) {
+    public ResponseEntity<List<TaskResponseDto>> list(Authentication authentication, @RequestParam(required = false) Long projectId, @RequestParam(required = false) TaskStatus status, @RequestParam(required = false) Long assignedToId) {
         return ResponseEntity.ok(taskService.getAll(authentication.getName(), projectId, status, assignedToId));
     }
 
@@ -43,16 +40,12 @@ public class TaskController {
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
     @PutMapping("/{id}")
-    public ResponseEntity<TaskResponseDto> update(Authentication authentication,
-                                                  @PathVariable Long id,
-                                                  @Valid @RequestBody TaskRequestDto dto) {
+    public ResponseEntity<TaskResponseDto> update(Authentication authentication, @PathVariable Long id, @Valid @RequestBody TaskRequestDto dto) {
         return ResponseEntity.ok(taskService.update(authentication.getName(), id, dto));
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<TaskResponseDto> changeStatus(Authentication authentication,
-                                                        @PathVariable Long id,
-                                                        @RequestParam TaskStatus status) {
+    public ResponseEntity<TaskResponseDto> changeStatus(Authentication authentication, @PathVariable Long id, @RequestParam TaskStatus status) {
         return ResponseEntity.ok(taskService.changeStatus(authentication.getName(), id, status));
     }
 

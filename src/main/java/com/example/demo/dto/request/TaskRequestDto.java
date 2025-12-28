@@ -5,28 +5,35 @@ import com.example.demo.entity.TaskStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
-public record TaskRequestDto(
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class TaskRequestDto {
         @NotNull
-        Long projectId,
+        private Long projectId;
 
         @NotBlank
         @Size(max = 300)
-        String title,
+        private String title;
 
         @Size(max = 4000)
-        String description,
+        private String description;
 
         @NotNull
-        TaskStatus status,
+        private TaskStatus status;
 
         @NotNull
-        TaskPriority priority,
+        private TaskPriority priority;
 
-        LocalDate dueDate,
+        private LocalDate dueDate;
 
-        Long assignedToId
-) {
+        private Long assignedToId;
 }

@@ -53,18 +53,25 @@ class CommentServiceImplTest {
         setAuth("ROLE_USER");
 
         String email = "user@test.com";
-        User author = User.builder().id(2L).email(email).isActive(true).build();
+        User author = new User();
+        author.setId(2L);
+        author.setEmail(email);
+        author.setActive(true);
 
-        Project project = Project.builder().id(10L).name("P").build();
-        Task task = Task.builder().id(100L).project(project).build();
+        Project project = new Project();
+        project.setId(10L);
+        project.setName("P");
 
-        Comment comment = Comment.builder()
-                .id(5L)
-                .author(author)
-                .task(task)
-                .text("hi")
-                .createdAt(Instant.now())
-                .build();
+        Task task = new Task();
+        task.setId(100L);
+        task.setProject(project);
+
+        Comment comment = new Comment();
+        comment.setId(5L);
+        comment.setAuthor(author);
+        comment.setTask(task);
+        comment.setText("hi");
+        comment.setCreatedAt(Instant.now());
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(author));
         when(commentRepository.findById(5L)).thenReturn(Optional.of(comment));
@@ -79,15 +86,20 @@ class CommentServiceImplTest {
         setAuth("ROLE_USER");
 
         String email = "user2@test.com";
-        User actor = User.builder().id(3L).email(email).isActive(true).build();
-        User author = User.builder().id(2L).email("author@test.com").isActive(true).build();
+        User actor = new User();
+        actor.setId(3L);
+        actor.setEmail(email);
+        actor.setActive(true);
+        User author = new User();
+        author.setId(2L);
+        author.setEmail("author@test.com");
+        author.setActive(true);
 
-        Comment comment = Comment.builder()
-                .id(5L)
-                .author(author)
-                .text("hi")
-                .createdAt(Instant.now())
-                .build();
+        Comment comment = new Comment();
+        comment.setId(5L);
+        comment.setAuthor(author);
+        comment.setText("hi");
+        comment.setCreatedAt(Instant.now());
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(actor));
         when(commentRepository.findById(5L)).thenReturn(Optional.of(comment));
@@ -98,7 +110,6 @@ class CommentServiceImplTest {
 
     private void setAuth(String role) {
         SecurityContextHolder.getContext().setAuthentication(
-                new UsernamePasswordAuthenticationToken("x", "x", List.of(new SimpleGrantedAuthority(role)))
-        );
+                new UsernamePasswordAuthenticationToken("x", "x", List.of(new SimpleGrantedAuthority(role))));
     }
 }

@@ -19,9 +19,9 @@ public interface TaskMapper {
     @Mapping(target = "updatedAt", ignore = true)
     Task toEntity(TaskRequestDto dto);
 
-    @Mapping(target = "projectId", expression = "java(projectId(task.getProject()))")
-    @Mapping(target = "createdById", expression = "java(userId(task.getCreatedBy()))")
-    @Mapping(target = "assignedToId", expression = "java(userId(task.getAssignedTo()))")
+    @Mapping(target = "projectId", source = "project")
+    @Mapping(target = "createdById", source = "createdBy")
+    @Mapping(target = "assignedToId", source = "assignedTo")
     TaskResponseDto toResponse(Task task);
 
     default Long userId(User user) {

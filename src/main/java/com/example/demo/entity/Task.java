@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @EqualsAndHashCode(of = "id")
 public class Task {
 

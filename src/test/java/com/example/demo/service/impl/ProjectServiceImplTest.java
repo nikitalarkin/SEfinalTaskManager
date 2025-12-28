@@ -50,24 +50,31 @@ class ProjectServiceImplTest {
         setAuth("ROLE_MANAGER");
 
         String email = "manager@test.com";
-        User creator = User.builder().id(1L).email(email).isActive(true).build();
+        User creator = new User();
+        creator.setId(1L);
+        creator.setEmail(email);
+        creator.setActive(true);
 
         ProjectRequestDto dto = new ProjectRequestDto("Project A", "Desc", Set.of());
-        Project entity = Project.builder().name(dto.name()).description(dto.description()).build();
+        Project entity = new Project();
+        entity.setName(dto.getName());
+        entity.setDescription(dto.getDescription());
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(creator));
         when(projectMapper.toEntity(dto)).thenReturn(entity);
         when(projectRepository.save(any(Project.class))).thenAnswer(inv -> inv.getArgument(0));
         when(projectMapper.toResponse(any(Project.class))).thenAnswer(inv -> {
             Project p = inv.getArgument(0);
-            return new ProjectResponseDto(10L, p.getName(), p.getDescription(), p.getCreatedBy().getId(), p.getCreatedAt(), p.getMembers().stream().map(User::getId).collect(java.util.stream.Collectors.toSet()));
+            return new ProjectResponseDto(10L, p.getName(), p.getDescription(), p.getCreatedBy().getId(),
+                    p.getCreatedAt(),
+                    p.getMembers().stream().map(User::getId).collect(java.util.stream.Collectors.toSet()));
         });
 
         ProjectResponseDto resp = projectService.create(email, dto);
 
-        assertEquals(dto.name(), resp.name());
-        assertNotNull(resp.createdById());
-        assertTrue(resp.memberIds().contains(creator.getId()));
+        assertEquals(dto.getName(), resp.getName());
+        assertNotNull(resp.getCreatedById());
+        assertTrue(resp.getMemberIds().contains(creator.getId()));
         verify(projectRepository).save(any(Project.class));
     }
 
@@ -76,11 +83,18 @@ class ProjectServiceImplTest {
         setAuth("ROLE_ADMIN");
 
         String email = "admin@test.com";
-        User admin = User.builder().id(99L).email(email).isActive(true).build();
+        User admin = new User();
+        admin.setId(99L);
+        admin.setEmail(email);
+        admin.setActive(true);
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(admin));
-        when(projectRepository.findAll()).thenReturn(List.of(Project.builder().id(1L).name("P1").build()));
-        when(projectMapper.toResponse(any(Project.class))).thenReturn(new ProjectResponseDto(1L, "P1", null, null, null, Set.of()));
+        Project p1 = new Project();
+        p1.setId(1L);
+        p1.setName("P1");
+        when(projectRepository.findAll()).thenReturn(List.of(p1));
+        when(projectMapper.toResponse(any(Project.class)))
+                .thenReturn(new ProjectResponseDto(1L, "P1", null, null, null, Set.of()));
 
         List<ProjectResponseDto> res = projectService.getMy(email);
         assertEquals(1, res.size());
@@ -88,7 +102,6 @@ class ProjectServiceImplTest {
 
     private void setAuth(String role) {
         SecurityContextHolder.getContext().setAuthentication(
-                new UsernamePasswordAuthenticationToken("x", "x", List.of(new SimpleGrantedAuthority(role)))
-        );
+                new UsernamePasswordAuthenticationToken("x", "x", List.of(new SimpleGrantedAuthority(role))));
     }
 }
