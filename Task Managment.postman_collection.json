@@ -283,6 +283,49 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "create project with not admin",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "stavr@gmail.com",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "StrongPass123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Design project\",\r\n  \"description\": \"design for app\",\r\n  \"memberIds\": []\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/projects",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"projects"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
